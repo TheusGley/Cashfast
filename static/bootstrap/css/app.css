@@ -1,0 +1,75 @@
+.h2, .h5 .h3 .font{
+    font-family: 'Poppins', sans-serif;
+}
+
+.text-center{
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 18px !important;
+
+}
+
+.card{
+    background-color: #aa54ca;
+}
+.font{
+    font-family: 'Prompt', sans-serif;
+}
+.card-tittle{
+    font-family: 'Prompt', sans-serif;
+    font-size: 15px;
+
+}
+
+.btn-primary{
+    background-color:#7b468f !important;
+}
+
+.nav-link {
+    --bs-nav-pills-border-radius: 0.375rem !important;
+    --bs-nav-pills-link-active-color: #fff !important;
+    --bs-nav-pills-link-active-bg: #963db7 !important;
+
+}
+.text-center{
+
+    text-align: center;
+}
+
+
+
+.row{ 
+  
+    margin-left: 0;
+    margin-right: 0;}
+
+
+
+.bkg{
+    background-color: #963db7;
+}
+
+.hidden {
+    display: none;
+}
+p{font-family: 'Poppins', sans-serif;
+
+
+}
+#id_nome{
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+}
+button{
+    font-family: 'Poppins', sans-serif;
+    border-radius: 10px;
+    background-color: #7b468f;
+}
+h2{
+    font-family: 'Poppins', sans-serif;
+    font-size: 35px;
+}
+input{
+    font-family: 'Poppins', sans-serif;
+    border-radius: 10px;
+
+}

@@ -1,0 +1,514 @@
+
+{%load static %}
+<!DOCTYPE html>
+<head>
+
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.js'%}"></script>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500&display=swap" rel="stylesheet">
+	<link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet"></script>
+	<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+	<link rel="stylesheet" href="{% static 'bootstrap/css/app.css' %}">
+
+    
+<title>Controle de estoque  </title>
+</head>
+<body style="background-color:#F7F7F7">
+	<ul class="nav m-1">
+		<li class="h2">
+			<img src="{% static 'images/cashfast.jpeg' %}">
+		</li>
+	
+	 
+	  {% if user.is_authenticated%}
+		<li class="nav-item" >
+			<a class="nav-link font disable" href="">Bem vindo {{ user }} </a>
+		</li>
+
+		<li class="nav-item" >
+			<a class="nav-link font" href="{% url 'logout' %}">Logout </a>
+		</li>
+
+	{%else %}
+	<li class="nav-item" >
+		<a class="nav-link font disable" href="{% url 'login' %}"> Login </a>
+	</li>
+	 {%endif%}
+	<div class="container-fluid">
+		<div class="row ">
+		  <div class="col-2 border  ">
+			<div class="row ">
+				{% comment %} <div class="col-4 border">
+					<div class="nav flex-column nav-pills border-bottom mp-3  d-block" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+					  <label class="nav-link  my-1 mp-2 pl-2 text-dark" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"> <img  width="35px" heigth="30px" src="{% static 'images/home.png' %}" > Home</label>
+					  <label class="nav-link my-1 mp-2 pl-2  text-dark " id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false"><img class="p-1" width="35px" heigth="30px" src="{% static 'images/seta.png' %}">Visão geral</label>
+					  <label class="nav-link my-1 mp-2 pl-2  text-dark" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"> <img class="p-1" width="35px" heigth="30px" src="{% static 'images/repre.png' %}">Representantes</label>
+					  <label class="nav-link  my-1 mp-2 pl-2 text-dark" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false"><img class="p-1" width="35px" heigth="30px" src="{% static 'images/caixa.png' %}">Estoque</label>
+					</div>{% endcomment %}
+				  </div> 
+				  
+				  <div class="col-4">
+					<div class="input-group mb-3 ">
+						<label class="h5 mt-3 mx-auto d-block"> <img  width="35px" heigth="30px" src="{% static 'images/filtro.png' %}"> Filtros</label>	
+					</div>
+				
+					<div class="input-group mb-3 ">
+						<label class=" font mt-1 mx-auto d-block"> Estabelecimento </label>	
+					</div>
+						<select class="form-select mx-auto d-block" id="inputGroupSelect02">
+						  <option selected>Todos</option>
+
+						  <option >	
+						  {% for estabelecimento in estabelecimentos %} 
+								<option class="small">  {{estabelecimento.nome}} </option>
+								{% endfor %}
+						 
+						</select>
+					
+					<div class="input-group mb-4">
+						<label class=" font mt-1 mx-auto d-block"> Representantes </label>	
+					</div>
+						<select id="filtro" class="form-select mx-auto d-block" id="inputGroupSelect02" onchange="filtrarTabela()">
+						  <option selected> Todos</option>		
+						  
+						  
+						</select>
+				
+				
+						<div class="input-group mb-4">
+							<label class=" font mt-1  mx-auto d-block">Status </label>	
+						</div>
+							<select class="form-select mx-auto d-block  " id="inputGroupSelect02">
+							  <option selected>Todos</option>
+							  {% for estabelecimento in estabelecimentos %} 
+							  <option class="small"> {{estabelecimento.status}} </option>
+							  {% endfor %}
+							 
+							
+							</select>
+						
+					
+					
+					<div class="input-group mb-4">
+						<label class="font mt-1 mx-auto d-block"> Modelo </label>	
+					</div>
+						<select class="form-select mx-auto d-block  " id="inputGroupSelect02">
+						  <option selected>Todos</option>
+						  {% for estabelecimento in estabelecimentos %} 
+						  <option class="small">  {{estabelecimento.modelo}} </option>
+						  {% endfor %}
+						 
+						</select>
+				
+					<div class="input-group mt-4">
+						<button type="button" class="btn btn-primary  btn-lg"> <a class="link-dark link-underline link-underline-opacity-0" href="{% url "estabelecimento_novo" %}">Cadastrar novo Estabelecimento </a> </button>
+					</div> 
+				
+				  </div>
+		
+		  </div>
+		  <div class="col-xl border ">
+			
+			<table id="listar-tabela" class="table table-hover">
+				<thead class="bkg">
+					<tr>
+						<th>Estabelecimento</th>
+						<th>Representante</th>
+						<th>Maquina</th>
+						<th>Modelo</th>
+						<th>Última Venda</th>
+						<th>Status</th>
+						<th>Status Descrição</th>
+					</tr>
+				</thead>
+				<tbody class="table-group-divider table-hover">
+					{% for estabelecimento in estabelecimentos %}
+					<tr class="table-ligth opcao1" {% if form.is_bound and not form.is_valid %}{% if form.errors.representante %}style="display:none"{% endif %}{% endif %}>
+						<td class="font sm"> <a href ="{%url 'bond_update' estabelecimento.id%}"  class="link"><small>{{estabelecimento.nome}} </a></td>        
+						<td class=" sm"> <small>{{estabelecimento.representante}}  </td>        
+						<td class=" sm"> <small>{{estabelecimento.maquina}}   </td>        
+						<td class=" sm"> <small>{{estabelecimento.modelo}}   </td>        
+						<td class=" sm"> <small>{{estabelecimento.ultima_venda}}   </td>        
+						<td class=" sm"> <small>{{estabelecimento.status}}   </td>        
+						<td class="font sm"> <small>{{estabelecimento.status_descricao}}   </td>    
+					</tr>   
+					{%endfor%}
+				</tbody>
+			</table>
+		
+		</div>
+
+
+		  <div class="col-2 border ">
+			<div class="col">
+				
+				<h3 class="font" >Pricipais resultados</h3>
+					<div class="card " style="width: 12rem; ">
+	
+						<div class="card-body">
+							<p class="card-tittle text-center " > {{qtd_maquinas}} </p>
+							<p class="card-tittle mx-auto d-block " >Quantidade de Máquinas</p>											
+							<img class="img" src=" {%static  'images/maquina.png'%}" width="30px" height="30px" alt="Maquina" >
+							<button  type="button" class="btn btn-primary " data-toggle="modal" data-target="#qtdMaquina">  Visualizar </button>
+								<!-- Modal -->
+				<div class="modal fade" id="qtdMaquina" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+					  <div class="modal-content">
+						<div class="modal-header">
+						  <h5 class="modal-title" id="exampleModalLongTitle">Quantidade de Máquinas</h5>
+						  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						  </button>
+						</div>
+						<div class="modal-body">
+							<table>
+								
+									<thead>
+									  <tr>
+										<th>Nome</th>
+										<th>Máquinas</th>
+										<th>Modelo</th>		
+										<th>Status</th>
+									  </tr>
+									</thead>
+									<tbody>
+									  {% for i in estabelecimentos %}
+										{% if i.status == 'Ativo' %}
+										  <tr>
+											<td>{{ i.nome }}</td>
+											<td>{{ i.maquina }}</td>
+											<td>{{ i.modelo }}</td>
+											<td>{{ i.status }}</td>
+										  </tr>
+										  {% if forloop.counter|divisibleby:2 %}
+											<tr><td colspan="3"><br></td></tr>
+										  {% endif %}
+										{% endif %}
+									  {% empty %}
+										<tr>
+										  <td colspan="3">Nenhum ativo encontrado.</td>
+										</tr>
+									  {% endfor %}
+									</tbody>
+								  </table>
+						
+						  </div>
+						
+					  </div>
+								</div>
+						</div>
+					</div><br>	
+	
+				
+					<div class="card" style="width: 12rem;">
+	
+						<div class="card-body">
+							<p class="font-weight-bold text-center"  >{{qtd_maquina_ativa}}</p> 
+							<p class="card-tittle mx-auto d-block ">Quantidade de Máquinas Ativas</p>
+							<img class="img" src=" {%static  'images/carrinho.png'%}" width="30px" height="30px" alt="Maquina" >
+							<button  type="button" class="btn btn-primary " data-toggle="modal" data-target="#qtdMaquinaAtv">  Visualizar </button>	
+							<!-- Modal -->
+							<div class="modal fade" id="qtdMaquinaAtv" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+								  <div class="modal-content">
+									<div class="modal-header">
+									  <h5 class="modal-title" id="exampleModalLongTitle">Máquinas Ativas </h5>
+									  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									  </button>
+									</div>
+									<div class="modal-body">
+										<div class="modal-body">{% if estabelecimentos %}
+											<table class="table table-striped table-hover">
+											  <thead>
+												<tr>
+												  <th>Nome</th>
+												  <th>Máquina</th>
+												  <th>Modelo</th>
+												  <th>Status</th>
+												</tr>
+											  </thead>
+											  <tbody>
+												{% for estabelecimento in estabelecimentos %}
+												  {% if estabelecimento.status == 'Ativo' %}
+													<tr>
+													  <td>{{ estabelecimento.nome }}</td>
+													  <td>{{ estabelecimento.maquina }}</td>
+													  <td>{{ estabelecimento.modelo }}</td>
+													  <td>{{ estabelecimento.status }}</td>
+													</tr>
+												  {% endif %}
+												{% empty %}
+												  <tr>
+													<td colspan="4">Nenhum ativo encontrado.</td>
+												  </tr>
+												{% endfor %}
+											  </tbody>
+											</table>
+										  {% else %}
+											<p>Nenhum estabelecimento encontrado.</p>
+										  {% endif %}
+				
+										  </div>									</div>
+								
+								  </div>
+											</div>
+									</div>
+								</div><br>	
+				
+							
+					
+
+					
+						
+					<div class="card" style="width: 12rem;">
+	
+						<div class="card-body ">
+							<p class="font-weight-bold text-center "  >{{qtd_maquina_paradas}}</p> 
+							<p class="card-tittle mx-auto d-block ">Quantidade de Máquinas Paradas</p>
+							<img class="img" src=" {%static  'images/cedula.png'%}" width="30px" height="30px" alt="Maquina" >
+							<button  type="button" class="btn btn-primary " data-toggle="modal" data-target="#qtdMaquinaParada">  Visualizar </button>	<!-- Modal -->
+							<div class="modal fade" id="qtdMaquinaParada" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+								  <div class="modal-content">
+									<div class="modal-header">
+									  <h5 class="modal-title" id="exampleModalLongTitle">Máquinas Paradas</h5>
+									  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									  </button>
+									</div>
+									<div class="modal-body">
+									  ...	<div class="modal-body">{% if estabelecimentos %}
+										<table class="table table-striped table-hover">
+										  <thead>
+											<tr>
+											  <th>Nome</th>
+											  <th>Máquina</th>
+											  <th>Modelo</th>
+											  <th>Status</th>
+											</tr>
+										  </thead>
+										  <tbody>
+											{% for estabelecimento in estabelecimentos %}
+											  {% if estabelecimento.status == 'Parado' %}
+												<tr>
+												  <td>{{ estabelecimento.nome }}</td>
+												  <td>{{ estabelecimento.maquina }}</td>
+												  <td>{{ estabelecimento.modelo }}</td>
+												  <td>{{ estabelecimento.status }}</td>
+												</tr>
+											  {% endif %}
+											{% empty %}
+											  <tr>
+												<td colspan="4">Nenhum ativo encontrado.</td>
+											  </tr>
+											{% endfor %}
+										  </tbody>
+										</table>
+									  {% else %}
+										<p>Nenhum estabelecimento encontrado.</p>
+									  {% endif %}
+			
+									  </div>
+									</div>
+								
+								  </div>
+											</div>
+									</div>
+								</div><br>	
+				
+
+				   
+						
+					</div>
+					<div class="card" style="width: 12rem;">
+	
+						<div class="card-body">
+							<p class="font-weight-bold text-center"  >{{qtd_maquina_retirar}}</p> 
+							<p class="card-tittle mx-auto d-block ">Máquinas a  Retirar</p>
+							<img class="img" src=" {%static  'images/moeda.png'%}" width="30px" height="30px" alt="Maquina" >
+							<button  type="button" class="btn btn-primary " data-toggle="modal" data-target="#Retirar">  Visualizar </button>	<!-- Modal -->
+							<div class="modal fade" id="Retirar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+								  <div class="modal-content">
+									<div class="modal-header">
+									  <h5 class="modal-title" id="exampleModalLongTitle"> Máquinas a  Retirar</h5>
+									  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									  </button>
+									</div>
+									<div class="modal-body">
+										<div class="modal-body">{% if estabelecimentos %}
+											<table class="table table-striped table-hover">
+											  <thead>
+												<tr>
+												  <th>Nome</th>
+												  <th>Máquina</th>
+												  <th>Modelo</th>
+												  <th>Status</th>
+												</tr>
+											  </thead>
+											  <tbody>
+												{% for estabelecimento in estabelecimentos %}
+												  {% if estabelecimento.status == 'Retirar' %}
+													<tr>
+													  <td>{{ estabelecimento.nome }}</td>
+													  <td>{{ estabelecimento.maquina }}</td>
+													  <td>{{ estabelecimento.modelo }}</td>
+													  <td>{{ estabelecimento.status }}</td>
+													</tr>
+												  {% endif %}
+												{% empty %}
+												  <tr>
+													<td colspan="4">Nenhum ativo encontrado.</td>
+												  </tr>
+												{% endfor %}
+											  </tbody>
+											</table>
+										  {% else %}
+											<p>Nenhum estabelecimento encontrado.</p>
+										  {% endif %}
+				
+										  </div>
+									</div>
+									
+								  </div>
+											</div>
+									</div>
+								</div><br>	
+				
+							
+						
+					<div class="card" style="width: 12rem;">
+	
+						<div class="card-body">
+							<p class=" text-center"  >{{qtd_maquina_estoque}}</p> 
+							<p class="card-tittle mx-auto d-block "> Máquinas em Estoque</p>
+							<img class="img" src=" {%static  'images/casa.png'%}" width="30px" height="30px" alt="Maquina" >
+							<button  type="button" class="btn btn-primary " data-toggle="modal" data-target="#estoque">  Visualizar </button>	<!-- Modal -->
+							<div class="modal fade" id="estoque" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+								  <div class="modal-content">
+									<div class="modal-header">
+									  <h5 class="modal-title" id="exampleModalLongTitle">Máquinas em Estoque</h5>
+									  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									  </button>
+									</div>
+									<div class="modal-body">
+										<div class="modal-body">{% if estabelecimentos %}
+											<table class="table table-striped table-hover">
+											  <thead>
+												<tr>
+												  <th>Nome</th>
+												  <th>Máquina</th>
+												  <th>Modelo</th>
+												  <th>Status</th>
+												</tr>
+											  </thead>
+											  <tbody>
+												{% for estabelecimento in estabelecimentos %}
+												  {% if estabelecimento.status == 'Estoque' %}
+													<tr>
+													  <td>{{ estabelecimento.nome }}</td>
+													  <td>{{ estabelecimento.maquina }}</td>
+													  <td>{{ estabelecimento.modelo }}</td>
+													  <td>{{ estabelecimento.status }}</td>
+													</tr>
+												  {% endif %}
+												{% empty %}
+												  <tr>
+													<td colspan="4">Nenhum ativo encontrado.</td>
+												  </tr>
+												{% endfor %}
+											  </tbody>
+											</table>
+										  {% else %}
+											<p>Nenhum estabelecimento encontrado.</p>
+										  {% endif %}
+				
+										  </div>
+									</div>
+									
+								  </div>
+											</div>
+									</div>
+								</div><br>	
+				
+
+				
+				
+			
+
+							
+			
+
+		  </div>
+		</div>
+	  </div>
+
+	
+			
+				
+					
+		
+
+		
+
+					
+						
+					
+
+
+					
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://unpkg.com/htmx.org@1.8.6"></script>
+
+<script>
+
+	$(document).ready(function(){
+	
+		$('#listar-tabela').DataTable({
+			responsive: true,
+			// "bSort": false,
+			"aaSorting": [],
+			"pageLength": 20,
+			"language": {
+				"decimal": "",
+				"emptyTable": "Sem dados disponíveis",
+				"info": "Mostrando de 1 até de {{qtd_maquinas}} registros",
+				"infoEmpty": "Mostrando de 0 até 0 de 0 registros",
+				"infoFiltered": "(filtrado de {{qtd_maquinas}} registros no total)",
+				"infoPostFix": "",
+				"thousands": ",",
+				"loadingRecords": "A carregar dados...",
+				"processing": "A processar...",
+				"search": "Procurar:",
+				"zeroRecords": "Não foram encontrados resultados",
+				"paginate": {
+					"first": "Primeiro",
+					"last": "Último",
+					"next": "Seguinte",
+					"previous": "Anterior"
+				},
+				"aria": {
+					"sortAscending": ": ordem crescente",
+					"sortDescending": ": ordem decrescente"
+				}
+			}
+		});
+	}) 
+		
+</script>
+			
+</html>

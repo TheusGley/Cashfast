@@ -1,0 +1,28 @@
+
+{%extends 'res.html'%}
+
+{%block main%}
+
+<title>Novo Estabelecimento</title>
+<body style="background-color:#F7F7F7" class="text-center">
+    <div class="d-flex justify-content-center text-center align-text-center" style="height: 100vh;">
+       
+
+        <div class="row mx-auto" style="width: 18rem;">
+            
+                <h2> Adicionando um novo Estabelecimento </h2>
+
+                <form action="{% url 'estabelecimento_novo' %}" method="POST" >
+                    {%csrf_token%}
+                {{form.as_p}}
+
+                    <button type="submit"> Cadastrar </button>
+                    
+                </form>
+                <button onclick="{%url  'bond_home' %}"> Voltar </button>
+            </div>
+            
+            {%endblock%}
+        </div>
+    </div>
+</body>

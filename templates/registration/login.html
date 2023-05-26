@@ -1,0 +1,51 @@
+{%load static %}
+<head>
+
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" href="{%static 'images/favicon.png'%}">
+    <link rel="shortcut icon" href="{%static 'images/favicon.ico' %}">
+
+	
+	<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.js'%}"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500&display=swap" rel="stylesheet">	
+	<link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+	<link rel="stylesheet" href="{% static 'bootstrap/css/app.css' %}">
+    
+    <title>Login</title>
+
+</head>
+<body style="background-color:#F7F7F7" class="text-center">
+    <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <img width="500px" class="mb-4 ml-3"  src="{% static 'images/cashfast.jpeg' %}">
+
+        <div class="row mx-auto" style="width: 18rem;">
+            <form method="post">
+                {% csrf_token %}
+               
+                <label class="font" for="username">Nome de usuário</label>
+                <div > 
+                    <input class="form-control" type="text" id="username" name="username">
+                </div>
+                <label class="font" for="password">Senha</label>
+                <div >
+                    <input type="password" id="password" name="password" class="form-control" aria-labelledby="passwordHelpBlock">
+                </div>
+                <button class ="w-100 mt-1 btn btn-lg btn-primary" type="submit">Entrar</button>
+            </form> 
+            <label class="font" id="copyright">
+                &copy; CASHFAST 2023. Sistema interno de estoques
+            </label>
+        </div>
+    </div>
+
+        
+</body>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://unpkg.com/htmx.org@1.8.6"></script>
+

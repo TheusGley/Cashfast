@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>CashFacil</title>
+
+
+    <!-- Vendor css -->
+    <link href="{% static 'lib/font-awesome/css/font-awesome.css'%}" rel="stylesheet">
+    <link href="{% static 'lib/Ionicons/css/ionicons.css'%}" rel="stylesheet">
+
+    <!-- Slim CSS -->
+    <link rel="stylesheet" href="{%static 'css/styles.css'%}">
+
+  </head>
+  <body>
+
+    <div class="signin-wrapper">
+
+      <div class="signin-box">
+        <h2 class="slim-logo logoAlignCenter"><a href="index.html">
+          <img src="{% static 'img/logo-cashfacil.png'%}" alt="logo" class="logo"></a>
+          <!-- insumofacil<span></span></a> -->
+        </h2><br/>
+        <h2 class="signin-title-primary">Cadastro finalizado</h2><br/>
+        <h6 class="signin-title-secondary">Agora você está pronto para voltar a tela de login e entrar na nossa plataforma. 
+          {% comment %} <p class="mg-b-0"><a href="{% url 'account:login_user' %}">Clique Aqui!</a></p> {% endcomment %}
+        </h6>
+
+       
+
+    </div><!-- signin-wrapper -->
+
+    <script src="{%static 'lib/jquery/js/jquery.js'%}"></script>
+    <script src="{%static 'lib/popper.js/js/popper.js'%}"></script>
+    <script src="{%static 'lib/bootstrap/js/bootstrap.js'%}"></script>
+
+    <script src="{%static 'js/slim.js'%}"></script>
+
+  </body>
+</html>

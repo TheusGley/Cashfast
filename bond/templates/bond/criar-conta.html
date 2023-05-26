@@ -1,0 +1,85 @@
+{% load static %}
+{% comment %} {% load crispy_forms_tags %} {% endcomment %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>CashFacil</title>
+
+    <!-- Vendor css -->
+    <link href="{% static 'lib/font-awesome/css/font-awesome.css'%}" rel="stylesheet">
+    <link href="{% static 'lib/Ionicons/css/ionicons.css'%}" rel="stylesheet">
+
+    <!-- Slim CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css'%}">
+
+  </head>
+  <body>
+
+    <div class="d-md-flex flex-row-reverse">
+      <div class="signin-right">
+
+        <div class="signin-box signup">
+
+          <div class="mg-t-20">
+            <label class="section-title">Novo Cadastro</label>
+            <p class="mg-b-20 mg-sm-b-40">Faça o seu cadastro de maneira rápida e fácil.</p>
+
+            <div class="signin-box">
+              {% comment %} <form action="{%url 'users:singup'%}" method="POST"> {% endcomment %}
+                {% csrf_token %}
+  
+                  <div class="form-group">
+                    <input type="text" name="email" class="form-control" placeholder="Digite seu email">
+                  </div><!-- form-group -->
+                  <div class="form-group">
+                    <input type="text" name="username" class="form-control" placeholder="Digite seu usuário">
+                  </div><!-- form-group -->
+                  <div class="form-group mg-b-50">
+                    <input type="password" name="password" class="form-control" placeholder="Digite sua senha">
+                  </div><!-- form-group -->
+                <br/>
+              <button class="btn btn-block btn-cash" type="submit">CADASTRAR</button>
+              </form>
+            </div><br/><br/>
+
+            Você já tem uma conta? <a href="{% url 'account:login_user'%}">Acesse</a>
+          </div><!-- section-wrapper -->
+
+          
+        </div><!-- signin-box -->
+
+      </div><!-- signin-right -->
+      <div class="signin-left">
+        <div class="signin-box">
+          <h2 class="slim-logo"><a href="index.html">
+            <img src="{%static 'img/logo-cashfacil.png' %}" alt="logo" class="logo"></a>
+            <!-- insumofacil<span></span></a> -->
+          </h2>
+
+          <p>PORTAL CASHFAST</p>
+          <P>Tenha um portal personalizado para sua empresa. Você pode acessar 
+            pelo computador ou celular e ver o relatório completo das vendas</P>
+          
+          <P>SUPORTE TÉCNICO RÁPIDO E EFICIENTE</P>
+          <p>Problema na máquina? A gente resolve rápido. Fazemos a manutenção ou enviamos uma 
+            máquina nova em torno de 24h.</p>
+
+            <p><a href="https://www.cashfast.com.br/" target="_blank" class="btn btn-outline-secondary pd-x-25">Visite nosso site</a></p>
+
+            <p class="tx-12">&copy; Copyright 2022. Todos os Direitos Reservados.</p>
+        </div>
+      </div><!-- signin-left -->
+    </div><!-- d-flex -->
+
+    <script src="{% static 'lib/jquery/js/jquery.js'%}"></script>
+    <script src="{% static 'lib/popper.js/js/popper.js'%}"></script>
+    <script src="{% static 'lib/bootstrap/js/bootstrap.js'%}"></script>
+    <script src="{% static 'js/slim.js'%}"></script>
+
+   
+
+  </body>
+</html>
