@@ -129,7 +129,7 @@ def estabelecimento_redirect (request):
 @login_required
 def update_estabelecimento (request, id) :
     data = {}
-    estabelecimento = Estabelecimento.objects.get(id=id)
+    estabelecimento = Vendas.objects.get(id=id)
     form = EstabelecimentoForm(request.POST or None, instance=estabelecimento)
     data['estabelecimento'] = estabelecimento
     data['form']= form
